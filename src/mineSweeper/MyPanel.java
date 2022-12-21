@@ -11,11 +11,14 @@ public class MyPanel extends JPanel{
 
     final int SCREEN_HEIGHT = 600;
     final int SCREEN_WIDTH = 600;
-    final int SCREEN_UNITS = 25;
-    int numOfColumns = 10;
-    int NUM_OF_MINES = 25;
+    int numOfColumns = 13;
 
-    int[][] Mine = new int [NUM_OF_MINES][NUM_OF_MINES];
+    final int SCREEN_UNITS_X = SCREEN_WIDTH/numOfColumns;
+    final int SCREEN_UNITS_Y = SCREEN_HEIGHT/numOfColumns;
+
+    int NUM_OF_MINES = 10;
+    int[] mineX = new int[NUM_OF_MINES];
+    int[] mineY = new int[NUM_OF_MINES];
 
     MyPanel(){
         init();
@@ -29,12 +32,12 @@ public class MyPanel extends JPanel{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         for(int x = 0; x<=numOfColumns; x++){
-            g.drawLine(0, x* SCREEN_UNITS, SCREEN_WIDTH, x* SCREEN_UNITS);
-            g.drawLine(x* SCREEN_UNITS, 0,x* SCREEN_UNITS, SCREEN_HEIGHT);
+            g.drawLine(0, x* (SCREEN_HEIGHT/numOfColumns), SCREEN_WIDTH, x*(SCREEN_HEIGHT/numOfColumns));
+            g.drawLine(x* (SCREEN_WIDTH/numOfColumns), 0,x*(SCREEN_WIDTH/numOfColumns), SCREEN_HEIGHT);
         }
         g.setColor(Color.RED);
-        for (int i = 0; i < NUM_OF_MINES; i++) {
-            g.fillRect(Mine[i][0], Mine[0][i], SCREEN_UNITS, SCREEN_UNITS);
+        for(int i = 0; i < NUM_OF_MINES; i++) {
+            g.fillRect(mineX[i], mineY[i], (SCREEN_WIDTH/numOfColumns), (SCREEN_HEIGHT/numOfColumns));
         }
 
     }
@@ -43,9 +46,9 @@ public class MyPanel extends JPanel{
     }
     void init(){
         random = new Random();
-        for (int i = 0; i < NUM_OF_MINES; i++) {
-            Mine[0][i] = random.nextInt(SCREEN_WIDTH / SCREEN_UNITS) * SCREEN_UNITS;
-            Mine[i][0] = random.nextInt(SCREEN_WIDTH / SCREEN_UNITS) * SCREEN_UNITS;
+        for(int i = 0; i < NUM_OF_MINES; i++) {
+            mineX[i] = random.nextInt(SCREEN_WIDTH/SCREEN_UNITS_X) * SCREEN_UNITS_X;
+            mineY[i] = random.nextInt(SCREEN_HEIGHT/SCREEN_UNITS_Y) * SCREEN_UNITS_Y;
         }
     }
 
@@ -56,16 +59,11 @@ public class MyPanel extends JPanel{
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            getMouseX = (e.getX()/ SCREEN_UNITS) * SCREEN_UNITS;
-            getMouseY = (e.getY()/ SCREEN_UNITS) * SCREEN_UNITS;
+            getMouseX = (e.getX()/ SCREEN_UNITS_X) * SCREEN_UNITS_X;
+            getMouseY = (e.getY()/ SCREEN_UNITS_Y) * SCREEN_UNITS_Y;
             System.out.println(getMouseY);
             System.out.println(getMouseX);
-            for(int i = 0;i < NUM_OF_MINES;i++){
-                int x = random.nextInt(SCREEN_WIDTH / SCREEN_UNITS) * SCREEN_UNITS;
-                int y = random.nextInt(SCREEN_HEIGHT / SCREEN_UNITS) * SCREEN_UNITS;
-                Mine[i][0] = x;
-                Mine[0][i] = y;
-            }
+
             repaint();
         }
     }
